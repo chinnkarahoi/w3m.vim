@@ -77,7 +77,7 @@ if !exists('g:w3m#set_hover_on')
   let g:w3m#set_hover_on = 1
 endif
 if !exists('g:w3m#hover_delay_time')
-  let g:w3m#hover_delay_time = 100
+  let g:w3m#hover_delay_time = 2
 endif
 
 call add(g:w3m#user_agent_list, {'name':'w3m',     'agent':''})

@@ -726,74 +726,74 @@ function! s:default_highligh()
 endfunction
 
 function! s:applySyntax()
-  if b:enable_syntax == 0
-    return
-  endif
-  let link_s = -1
-  let bold_s = -1
-  let underline_s = -1
-  let input_s = -1
-  let input_highlight = ""
-  let link_anchor = 0
-  for tag in b:tag_list
-    if link_s == -1 && tag.tagname ==? 'a' && tag.type == s:TAG_START
-      if tag.col > 0
-        let link_s = tag.col -1
-      else
-        let link_s = 0
-      endif
-      if has_key(tag.attr, 'href') && tag.attr.href[0] == '#'
-        let link_anchor = 1
-      endif
-    elseif link_s != -1 && tag.tagname ==? 'a' && tag.type == s:TAG_END
-      let link_e = tag.col
-      if link_anchor == 1
-        call matchadd('w3mAnchor', '\%>'.link_s.'c\%<'.link_e.'c\%'.tag.line.'l')
-      else
-        call matchadd('w3mLink', '\%>'.link_s.'c\%<'.link_e.'c\%'.tag.line.'l')
-      endif
-      let link_anchor = 0
-      let link_s = -1
+  " if b:enable_syntax == 0
+  "   return
+  " endif
+  " let link_s = -1
+  " let bold_s = -1
+  " let underline_s = -1
+  " let input_s = -1
+  " let input_highlight = ""
+  " let link_anchor = 0
+  " for tag in b:tag_list
+  "   if link_s == -1 && tag.tagname ==? 'a' && tag.type == s:TAG_START
+  "     if tag.col > 0
+  "       let link_s = tag.col -1
+  "     else
+  "       let link_s = 0
+  "     endif
+  "     if has_key(tag.attr, 'href') && tag.attr.href[0] == '#'
+  "       let link_anchor = 1
+  "     endif
+  "   elseif link_s != -1 && tag.tagname ==? 'a' && tag.type == s:TAG_END
+  "     let link_e = tag.col
+  "     if link_anchor == 1
+  "       call matchadd('w3mAnchor', '\%>'.link_s.'c\%<'.link_e.'c\%'.tag.line.'l')
+  "     else
+  "       call matchadd('w3mLink', '\%>'.link_s.'c\%<'.link_e.'c\%'.tag.line.'l')
+  "     endif
+  "     let link_anchor = 0
+  "     let link_s = -1
 
-    elseif bold_s == -1 && tag.tagname ==? 'b' && tag.type == s:TAG_START
-      if tag.col > 0
-        let bold_s = tag.col -1
-      else
-        let bold_s = 0
-      endif
-    elseif bold_s != -1 && tag.tagname ==? 'b' && tag.type == s:TAG_END
-      let bold_e = tag.col
-      call matchadd('w3mBold', '\%>'.bold_s.'c\%<'.bold_e.'c\%'.tag.line.'l')
-      let bold_s = -1
+  "   elseif bold_s == -1 && tag.tagname ==? 'b' && tag.type == s:TAG_START
+  "     if tag.col > 0
+  "       let bold_s = tag.col -1
+  "     else
+  "       let bold_s = 0
+  "     endif
+  "   elseif bold_s != -1 && tag.tagname ==? 'b' && tag.type == s:TAG_END
+  "     let bold_e = tag.col
+  "     call matchadd('w3mBold', '\%>'.bold_s.'c\%<'.bold_e.'c\%'.tag.line.'l')
+  "     let bold_s = -1
 
-    elseif underline_s == -1 && tag.tagname ==? 'u' && tag.type == s:TAG_START
-      if tag.col > 0
-        let underline_s = tag.col -1
-      else
-        let underline_s = 0
-      endif
-    elseif underline_s != -1 && tag.tagname ==? 'u' && tag.type == s:TAG_END
-      let underline_e = tag.col
-      call matchadd('w3mUnderline', '\%>'.underline_s.'c\%<'.underline_e.'c\%'.tag.line.'l')
-      let underline_s = -1
+  "   elseif underline_s == -1 && tag.tagname ==? 'u' && tag.type == s:TAG_START
+  "     if tag.col > 0
+  "       let underline_s = tag.col -1
+  "     else
+  "       let underline_s = 0
+  "     endif
+  "   elseif underline_s != -1 && tag.tagname ==? 'u' && tag.type == s:TAG_END
+  "     let underline_e = tag.col
+  "     call matchadd('w3mUnderline', '\%>'.underline_s.'c\%<'.underline_e.'c\%'.tag.line.'l')
+  "     let underline_s = -1
 
-    elseif input_s == -1 && tag.tagname ==? 'input_alt' && tag.type == s:TAG_START
-      if s:is_tag_input_image_submit(tag)
-        let input_highlight = 'w3mSubmit'
-      else
-        let input_highlight = 'w3mInput'
-      endif
-      if tag.col > 0
-        let input_s = tag.col -1
-      else
-        let input_s = 0
-      endif
-    elseif input_s != -1 && stridx(tag.tagname, 'input') == 0 && tag.type == s:TAG_END
-      let input_e = tag.col
-      call matchadd(input_highlight, '\%>'.input_s.'c\%<'.input_e.'c\%'.tag.line.'l')
-      let input_s = -1
-    endif
-  endfor
+  "   elseif input_s == -1 && tag.tagname ==? 'input_alt' && tag.type == s:TAG_START
+  "     if s:is_tag_input_image_submit(tag)
+  "       let input_highlight = 'w3mSubmit'
+  "     else
+  "       let input_highlight = 'w3mInput'
+  "     endif
+  "     if tag.col > 0
+  "       let input_s = tag.col -1
+  "     else
+  "       let input_s = 0
+  "     endif
+  "   elseif input_s != -1 && stridx(tag.tagname, 'input') == 0 && tag.type == s:TAG_END
+  "     let input_e = tag.col
+  "     call matchadd(input_highlight, '\%>'.input_s.'c\%<'.input_e.'c\%'.tag.line.'l')
+  "     let input_s = -1
+  "   endif
+  " endfor
 
 endfunction
 
